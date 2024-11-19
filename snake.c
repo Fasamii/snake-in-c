@@ -55,19 +55,24 @@ int main(void) {
 	char tmp_key;
 
 	noBlock();
+	printf("\033[2J\033[H");
+	fflush(stdout);
 
 	while(status) {
 		while (kb_hit()) {
 			usleep(500);
 			tmp_key = fgetc(stdin);
+			printf("\033[2J\033[H");
+			fflush(stdout);
 			if(tmp_key == 'w' || tmp_key == 'a' || tmp_key == 's' || tmp_key == 'd') {
 				key = tmp_key;
 			}
 			if(key == 'q') { break; }
 		}
 		usleep(206500);
+		//printf("\033[2J\033[H");
+		//fflush(stdout);
 		status = update(status, myCanvas, key);
-		printf("%c", key);
 	}
 
 	block();
