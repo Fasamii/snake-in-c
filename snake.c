@@ -5,6 +5,7 @@
 #include <time.h>
 #include "./typedef.h"
 #include "./keylistener.h"
+#include <sys/ioctl.h>
 
 typedef struct {
 	vecNode *snake;
@@ -16,6 +17,9 @@ void moveSnake(char key) {
 }
 
 void render() {
+	struct winsize win_size;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &win_size);
+	printf("<x --> %i> <y --> %i>\n", win_size.ws_row, win_size.ws_col);
 }
 
 void maintainFood() {}
@@ -23,7 +27,7 @@ void maintainFood() {}
 char update(char status, canvas *myCanvas, char key) {
 	moveSnake(key);
 	maintainFood();
-	render();
+//	render();
 	return status;
 }
 
@@ -52,30 +56,26 @@ int main(void) {
 	
 	char status = 'r';
 	char key;
-	char tmp_key;
+	char move;
 
-	noBlock();
+	tergame();
 	printf("\033[2J\033[H");
 	fflush(stdout);
 
 	while(status) {
-		while (kb_hit()) {
-			usleep(500);
-			tmp_key = fgetc(stdin);
-			printf("\033[2J\033[H");
-			fflush(stdout);
-			if(tmp_key == 'w' || tmp_key == 'a' || tmp_key == 's' || tmp_key == 'd') {
-				key = tmp_key;
+		while(kb_hit()) {
+			key = fgetc(stdin);
+			if(key == 'w' || key == 's' || key == 'a' || key == 'd') {
+				move = key;
+				printf("move -> %c\n",move);
 			}
-			if(key == 'q') { break; }
 		}
-		usleep(206500);
-		//printf("\033[2J\033[H");
-		//fflush(stdout);
 		status = update(status, myCanvas, key);
+		if(key == 'q') { break; }
+		usleep(500);
 	}
 
-	block();
+	close_tergame();
 
 	return freeGame();
 }

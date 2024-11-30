@@ -16,17 +16,21 @@ int kb_hit() {
 	return FD_ISSET(STDIN_FILENO, &fds);
 }
 
-void noBlock() {
+void tergame() {
+	printf("\e[?47h");
 	struct termios ttyStat;
 	tcgetattr(STDIN_FILENO, &ttyStat);
 	ttyStat.c_lflag &= ~ICANON;
 	ttyStat.c_cc[VMIN] = 1;
+	ttyStat.c_lflag &= ~ECHO;
 	tcsetattr(STDIN_FILENO, TCSANOW, &ttyStat);
 }
 
-void block() {
+void close_tergame() {
 	struct termios ttyStat;
 	tcgetattr(STDIN_FILENO, &ttyStat);
 	ttyStat.c_lflag |= ICANON;
+	ttyStat.c_lflag |= ECHO;
 	tcsetattr(STDIN_FILENO, TCSANOW, &ttyStat);
+	printf("\e[?47l");
 }

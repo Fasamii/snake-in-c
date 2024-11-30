@@ -1,4 +1,4 @@
-exe : snake.o keylistener.o
+exe : snake.o keylistener.o 
 	gcc ./build/snake.o ./build/keylistener.o -o exe
 
 snake.o : snake.c
