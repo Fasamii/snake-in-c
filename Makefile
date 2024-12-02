@@ -1,11 +1,11 @@
-exe : snake.o keylistener.o 
-	gcc ./build/snake.o ./build/keylistener.o -o exe
+exe : main.o terminal.o
+	gcc ./build/main.o ./build/terminal.o -o exe
 
-snake.o : snake.c
-	gcc -c snake.c -o ./build/snake.o
+main.o : src/main.c
+	gcc -c src/main.c -o ./build/main.o
 
-keylistener.o : keylistener.c
-	gcc -c keylistener.c -o ./build/keylistener.o
+terminal.o : src/terminal.c
+	gcc -c src/terminal.c -o ./build/terminal.o
 
 clean :
 	rm -f ./build/*
